@@ -1,0 +1,2894 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20x Hackathon | Innovation Beyond the Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --teal-900: #004d40;
+        --teal-800: #00695c;
+        --teal-700: #2d6b6b;
+        --teal-600: #3a6d71;
+        --teal-500: #5f9ea0;
+        --teal-400: #82a4a7;
+        --teal-100: #e0f2f1;
+        --teal-50: #f0faf9;
+        --coral: #ff8d6e;
+        --coral-light: #ffcfbf;
+        --dark: #004952;
+        --white: #ffffff;
+        --off-white: #f4f6f8;
+        --text: #1a2e35;
+        --text-muted: #5a7a82;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--text);
+        background: var(--dark);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.no-scroll {
+        overflow: hidden;
+      }
+
+      body.hide-cursor,
+      body.hide-cursor * {
+        cursor: none !important;
+      }
+
+      /* ── Progress Bar ── */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--coral), var(--teal-500));
+        width: 0;
+        z-index: 9999;
+        transition: width 0.15s linear;
+      }
+
+      /* ── Floating Nav Dots ── */
+      .nav-dots {
+        position: fixed;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .nav-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .nav-dot.active {
+        background: var(--coral);
+        border-color: var(--coral);
+        transform: scale(1.3);
+      }
+      .nav-dot:hover {
+        border-color: var(--white);
+      }
+
+      /* ── SECTION BASE ── */
+      .slide {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 6rem 2rem;
+        overflow: hidden;
+      }
+      .slide-inner {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* ── Reveal animation ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(60px);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .reveal.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-left {
+        opacity: 0;
+        transform: translateX(-80px);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .reveal-left.show {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .reveal-right {
+        opacity: 0;
+        transform: translateX(80px);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .reveal-right.show {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .reveal-scale {
+        opacity: 0;
+        transform: scale(0.85);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .reveal-scale.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .delay-1 {
+        transition-delay: 0.15s !important;
+      }
+      .delay-2 {
+        transition-delay: 0.3s !important;
+      }
+      .delay-3 {
+        transition-delay: 0.45s !important;
+      }
+      .delay-4 {
+        transition-delay: 0.6s !important;
+      }
+
+      /* ═══════════════════════════════════════════════
+           HERO — Full-page video background
+           ═══════════════════════════════════════════════ */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+      }
+      .hero-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+      .hero-video.playing {
+        opacity: 1;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 73, 82, 0.92) 0%,
+          rgba(0, 77, 64, 0.85) 50%,
+          rgba(45, 107, 107, 0.75) 100%
+        );
+        transition: opacity 0.8s ease;
+      }
+      .hero-overlay.video-playing {
+        opacity: 0;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: var(--white);
+        max-width: 900px;
+        padding: 2rem;
+        opacity: 0;
+        display: none;
+        transition: opacity 1.2s ease;
+      }
+      .hero-content.visible {
+        opacity: 1;
+      }
+      .hero-play-button-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+      }
+      .hero-play-button {
+        position: fixed;
+        z-index: 3;
+        background: linear-gradient(135deg, var(--coral), #ff6b4a);
+        color: var(--white);
+        border: none;
+        padding: 2rem 4rem;
+        font-size: 2.5rem;
+        font-weight: 900;
+        border-radius: 80px;
+        cursor: pointer;
+        box-shadow: 0 20px 60px rgba(255, 141, 110, 0.4);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        letter-spacing: 0.02em;
+        /* text-transform: uppercase; */
+        opacity: 0;
+        pointer-events: none;
+      }
+      .hero-play-button.show {
+        opacity: 1;
+      }
+      .hero-play-button .text-hackathon {
+        text-transform: uppercase;
+      }
+      .hero-play-button.intro-dot {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        font-size: 0;
+        border-radius: 50%;
+        opacity: 1;
+        pointer-events: none;
+        box-shadow: 0 10px 30px rgba(255, 141, 110, 0.6);
+        transition: none;
+      }
+      .hero-play-button.animating-to-center {
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .hero-play-button.expanding {
+        width: auto;
+        height: auto;
+        padding: 2rem;
+        font-size: 2.25rem;
+        border-radius: 60px;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .hero-play-button.text-visible {
+        opacity: 1;
+        pointer-events: all;
+        cursor: pointer;
+      }
+      .hero-play-button.text-visible:hover {
+        transform: scale(1.08) translateY(-4px);
+        box-shadow: 0 30px 80px rgba(255, 141, 110, 0.5);
+      }
+      .hero-play-button.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.8);
+      }
+      .hero-play-button.hide-hackathon {
+        color: transparent;
+        transition: color 0.3s ease;
+      }
+      .hero-play-button.shrink-to-20x {
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .hero-play-button.final-expand {
+        transform: scale(20);
+        opacity: 0;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .hero-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        background: rgba(255, 141, 110, 0.2);
+        border: 1px solid rgba(255, 141, 110, 0.5);
+        color: var(--coral);
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+      }
+      .hero h1 {
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+      .hero h1 span {
+        color: var(--coral);
+      }
+      .hero .subtitle {
+        font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+        font-weight: 300;
+        opacity: 0.9;
+        max-width: 650px;
+        margin: 0 auto 3rem;
+      }
+      .hero-scroll {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        font-weight: 500;
+        animation: pulse-down 2s ease-in-out infinite;
+      }
+      .hero-scroll svg {
+        width: 20px;
+        height: 20px;
+      }
+      @keyframes pulse-down {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.7;
+        }
+        50% {
+          transform: translateY(8px);
+          opacity: 1;
+        }
+      }
+
+      /* Hero stage-floor logo */
+      .hero-stage-logo {
+        position: absolute;
+        bottom: -8%;
+        left: 50%;
+        transform: translateX(-50%) perspective(600px) rotateX(55deg);
+        width: min(80vw, 700px);
+        opacity: 0;
+        z-index: 1;
+        pointer-events: none;
+        will-change: transform, opacity;
+        transition: opacity 1.2s ease;
+      }
+      .hero-stage-logo.visible {
+        opacity: 0.12;
+      }
+      .hero-stage-logo img {
+        width: 100%;
+        height: auto;
+        filter: brightness(0) invert(1);
+      }
+
+      /* Floating illustrations in hero */
+      .hero-illo-card {
+        position: absolute;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: drift 8s ease-in-out infinite;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      .hero-illo-card img {
+        filter: brightness(0) invert(1);
+        opacity: 0.7;
+      }
+      .hero-illo-card-1 {
+        top: 8%;
+        left: 4%;
+        width: 180px;
+        height: 160px;
+        animation-delay: 0s;
+      }
+      .hero-illo-card-1 img {
+        width: 120px;
+      }
+      .hero-illo-card-2 {
+        bottom: 8%;
+        right: 4%;
+        width: 170px;
+        height: 150px;
+        animation-delay: -3s;
+      }
+      .hero-illo-card-2 img {
+        width: 130px;
+      }
+      .hero-illo-card-3 {
+        top: 12%;
+        right: 8%;
+        width: 160px;
+        height: 140px;
+        animation-delay: -5s;
+        animation-duration: 10s;
+      }
+      .hero-illo-card-3 img {
+        width: 110px;
+      }
+      @keyframes drift {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: translate(10px, -15px) rotate(2deg);
+        }
+        50% {
+          transform: translate(-5px, -25px) rotate(-1deg);
+        }
+        75% {
+          transform: translate(-15px, -10px) rotate(1deg);
+        }
+      }
+
+      /* ═══════════════════════════════════════════════
+           THE PROBLEM
+           ═══════════════════════════════════════════════ */
+      .problem {
+        background: var(--white);
+      }
+      .problem-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .problem-text h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+      .problem-text p {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+      }
+      .problem-text ul {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+      }
+      .problem-text ul li {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        padding-left: 1.5rem;
+        position: relative;
+        margin-bottom: 0.75rem;
+      }
+      .problem-text ul li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--coral);
+        font-weight: bold;
+        font-size: 1.4rem;
+      }
+      .problem-visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .problem-visual img {
+        width: 100%;
+        max-width: 450px;
+        filter: drop-shadow(0 30px 60px rgba(0, 77, 64, 0.15));
+      }
+      /* Dust particle effect */
+      .dust-particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      .dust {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--teal-400);
+        opacity: 0.7;
+        animation: float-dust 6s ease-in-out infinite;
+        box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+      }
+      .dust:nth-child(1) {
+        top: 20%;
+        left: 30%;
+        animation-delay: 0s;
+      }
+      .dust:nth-child(2) {
+        top: 60%;
+        left: 50%;
+        animation-delay: -1.5s;
+        width: 8px;
+        height: 8px;
+      }
+      .dust:nth-child(3) {
+        top: 40%;
+        left: 70%;
+        animation-delay: -3s;
+        width: 16px;
+        height: 16px;
+      }
+      .dust:nth-child(4) {
+        top: 80%;
+        left: 20%;
+        animation-delay: -4s;
+      }
+      .dust:nth-child(5) {
+        top: 10%;
+        left: 60%;
+        animation-delay: -2s;
+        width: 10px;
+        height: 10px;
+      }
+      @keyframes float-dust {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+          opacity: 0.7;
+        }
+        50% {
+          transform: translateY(-30px) scale(1.3);
+          opacity: 0.3;
+        }
+      }
+
+      /* ═══════════════════════════════════════════════
+           THE 20X SOLUTION  (stats)
+           ═══════════════════════════════════════════════ */
+      .stats-section {
+        background: linear-gradient(
+          180deg,
+          var(--teal-100) 0%,
+          var(--white) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .stats-bg-illo {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 1.2s ease;
+      }
+      .stats-bg-illo.show {
+        opacity: 1;
+      }
+      .stats-bg-illo img {
+        width: min(90vw, 800px);
+        height: auto;
+        opacity: 0.06;
+      }
+      .stats-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .stats-header h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1rem;
+      }
+      .stats-header p {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .stat-card {
+        background: var(--white);
+        padding: 3rem 2rem;
+        border-radius: 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 30px rgba(0, 77, 64, 0.08);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 0.4s ease;
+      }
+      .stat-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--teal-500), var(--coral));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(0, 77, 64, 0.12);
+      }
+      .stat-card:hover::after {
+        transform: scaleX(1);
+      }
+      .stat-number {
+        font-size: 5rem;
+        font-weight: 900;
+        color: var(--teal-700);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .stat-label {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+      .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        width: 56px;
+        height: 56px;
+      }
+      .stat-icon img {
+        width: 100%;
+        height: 100%;
+        filter: invert(33%) sepia(20%) saturate(1000%) hue-rotate(140deg)
+          brightness(0.7);
+      }
+
+      /* ═══════════════════════════════════════════════
+           AI PLANNING
+           ═══════════════════════════════════════════════ */
+      .ai-section {
+        background: var(--dark);
+        color: var(--white);
+        position: relative;
+      }
+      .ai-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          ellipse at 30% 50%,
+          rgba(95, 158, 160, 0.15) 0%,
+          transparent 70%
+        );
+      }
+      .ai-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .ai-text h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--white), var(--teal-400));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .ai-text p {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        opacity: 0.9;
+        margin-bottom: 1.5rem;
+      }
+      .ai-highlight {
+        background: rgba(255, 141, 110, 0.1);
+        border-left: 3px solid var(--coral);
+        padding: 1.5rem 2rem;
+        border-radius: 0 12px 12px 0;
+        font-style: italic;
+        font-size: 1.1rem;
+      }
+      .ai-visual {
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+      .ai-visual-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ai-visual-card img {
+        width: 100%;
+        max-width: 360px;
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+      }
+      /* Glowing orbs */
+      .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(95, 158, 160, 0.3),
+          transparent 70%
+        );
+        animation: glow-pulse 4s ease-in-out infinite;
+      }
+      .glow-orb-1 {
+        width: 300px;
+        height: 300px;
+        top: -50px;
+        right: -50px;
+      }
+      .glow-orb-2 {
+        width: 200px;
+        height: 200px;
+        bottom: -30px;
+        left: -30px;
+        animation-delay: -2s;
+      }
+      @keyframes glow-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.8;
+        }
+      }
+
+      /* ═══════════════════════════════════════════════
+           REPEATABLE PROCESS
+           ═══════════════════════════════════════════════ */
+      .process-section {
+        background: var(--off-white);
+      }
+      .process-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .process-visual {
+        display: flex;
+        justify-content: center;
+      }
+      .process-visual img {
+        width: 100%;
+        max-width: 500px;
+        filter: drop-shadow(0 20px 50px rgba(0, 77, 64, 0.1));
+      }
+      .process-text h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1.5rem;
+      }
+      .process-text p {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+      .process-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .process-step {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        background: var(--white);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .process-step:hover {
+        transform: translateX(8px);
+        box-shadow: 0 4px 20px rgba(0, 77, 64, 0.08);
+      }
+      .step-num {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .step-text {
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      /* ═══════════════════════════════════════════════
+           PROJECTS — 48 HOURS
+           ═══════════════════════════════════════════════ */
+      .projects-section {
+        background: var(--white);
+      }
+      .projects-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .projects-header h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1rem;
+      }
+      .projects-header p {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+      }
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .project-card {
+        background: var(--white);
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        border: 2px solid var(--teal-100);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .project-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--teal-900), var(--teal-700));
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        z-index: 0;
+      }
+      .project-card:hover {
+        border-color: transparent;
+        transform: translateY(-8px) scale(1.02);
+      }
+      .project-card:hover::before {
+        opacity: 1;
+      }
+      .project-card:hover .project-title,
+      .project-card:hover .project-desc {
+        color: var(--white);
+      }
+      .project-card:hover .project-icon-wrap {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .project-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .project-icon-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        margin: 0 auto 1.5rem;
+        background: var(--teal-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.4s ease;
+      }
+      .project-icon-wrap img {
+        width: 40px;
+        height: 40px;
+        filter: invert(20%) sepia(30%) saturate(800%) hue-rotate(140deg)
+          brightness(0.6);
+        transition: filter 0.4s ease;
+      }
+      .project-card:hover .project-icon-wrap img {
+        filter: brightness(0) invert(1);
+      }
+      .project-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: var(--teal-900);
+        transition: color 0.4s ease;
+      }
+      .project-desc {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-muted);
+        transition: color 0.4s ease;
+      }
+
+      /* ═══════════════════════════════════════════════
+           VISION
+           ═══════════════════════════════════════════════ */
+      .vision-section {
+        background: linear-gradient(
+          180deg,
+          var(--teal-100) 0%,
+          var(--teal-50) 100%
+        );
+        position: relative;
+      }
+      .vision-bg-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .vision-bg-svg svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+        will-change: transform;
+      }
+      .vision-svg-top,
+      .vision-svg-bottom {
+        transition: transform 0.1s linear;
+        will-change: transform;
+      }
+      .vision-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .vision-header h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1rem;
+      }
+      .vision-header p {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+      }
+      .vision-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      .vision-card {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 3rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(0, 77, 64, 0.08),
+          0 2px 8px rgba(255, 255, 255, 0.3) inset,
+          0 -2px 8px rgba(0, 77, 64, 0.05) inset;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 0.4s ease, background 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .vision-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.8),
+          transparent
+        );
+      }
+      .vision-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--coral), var(--teal-500));
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.4s ease;
+      }
+      .vision-card:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 20px 60px rgba(0, 77, 64, 0.12),
+          0 4px 16px rgba(255, 255, 255, 0.4) inset,
+          0 -4px 16px rgba(0, 77, 64, 0.08) inset;
+      }
+      .vision-card:hover::after {
+        transform: scaleY(1);
+      }
+      .vision-card h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--teal-700);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .vision-card p {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        line-height: 1.8;
+      }
+      .vision-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        flex-shrink: 0;
+        background: var(--teal-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .vision-icon img {
+        width: 28px;
+        height: 28px;
+        filter: invert(20%) sepia(30%) saturate(800%) hue-rotate(140deg)
+          brightness(0.6);
+      }
+
+      /* ═══════════════════════════════════════════════
+           CLOSING
+           ═══════════════════════════════════════════════ */
+      .closing-section {
+        background: var(--white);
+      }
+      .closing-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .closing-text h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        color: var(--teal-900);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+      .closing-text p {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+      .closing-text strong {
+        color: var(--teal-900);
+      }
+      .closing-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border-radius: 20px;
+        height: 470px;
+      }
+      .closing-visual img {
+        width: 100%;
+        max-width: 380px;
+        filter: drop-shadow(0 20px 50px rgba(0, 77, 64, 0.1));
+      }
+      .closing-visual video {
+        height: 600px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 20px;
+        filter: drop-shadow(0 20px 50px rgba(0, 77, 64, 0.2));
+      }
+
+      /* ═══════════════════════════════════════════════
+           CTA
+           ═══════════════════════════════════════════════ */
+      .cta-section {
+        background: linear-gradient(
+          135deg,
+          var(--teal-900) 0%,
+          var(--dark) 50%,
+          var(--teal-700) 100%
+        );
+        color: var(--white);
+        min-height: 70vh;
+        position: relative;
+      }
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 50%,
+          rgba(255, 141, 110, 0.08) 0%,
+          transparent 60%
+        );
+      }
+      .cta-content {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-content h2 {
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+      .cta-content h2 span {
+        color: var(--coral);
+      }
+      .cta-content p {
+        font-size: 1.3rem;
+        opacity: 0.85;
+        max-width: 600px;
+        margin: 0 auto 3rem;
+        font-weight: 300;
+      }
+      .cta-btn {
+        display: inline-block;
+        padding: 1.25rem 3.5rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--teal-900);
+        background: var(--white);
+        border: none;
+        border-radius: 60px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      }
+      .cta-btn:hover {
+        transform: scale(1.08) translateY(-4px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      }
+      /* Floating illustrations in CTA */
+      .cta-illo-container {
+        position: absolute;
+        z-index: 1;
+        animation: drift 12s ease-in-out infinite;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+      .cta-illo-container-1 {
+        bottom: 5%;
+        left: 5%;
+      }
+      .cta-illo-container-2 {
+        top: 10%;
+        right: 5%;
+        animation-delay: -4s;
+      }
+      .cta-illo {
+        display: block;
+        width: 250px;
+        opacity: 0.9;
+      }
+      .cta-illo-container-2 .cta-illo {
+        width: 200px;
+      }
+
+      /* ═══════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════ */
+      @media (max-width: 968px) {
+        .problem-layout,
+        .ai-layout,
+        .process-layout,
+        .closing-layout {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .stats-grid,
+        .projects-grid {
+          grid-template-columns: 1fr;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        .vision-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-illo-card {
+          display: none;
+        }
+        .nav-dots {
+          display: none;
+        }
+        .process-step:hover {
+          transform: translateX(0);
+        }
+        .ai-highlight {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .slide {
+          padding: 4rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progressBar"></div>
+
+    <!-- Nav Dots -->
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- ═════════════════════════════════════════════════════
+     1. HERO — Full-page video background
+     ═════════════════════════════════════════════════════ -->
+    <section class="hero" id="s-hero">
+      <!-- Background video — will play on button click -->
+      <video class="hero-video" id="heroVideo" playsinline>
+        <source src="./presentation-assets/hero-bg.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay" id="heroOverlay"></div>
+
+      <!-- Stage-floor logo -->
+      <div class="hero-stage-logo" id="heroStageLogo">
+        <img src="./presentation-assets/tebra-logo.svg" alt="" />
+      </div>
+
+      <div class="hero-play-button-container">
+        <!-- Big play button -->
+        <button class="hero-play-button" id="heroPlayButton">
+          <span class="text text-20x" id="button20x">20x</span>
+          <span class="text text-hackathon" id="buttonHackathon"
+            >Hackathon</span
+          >
+        </button>
+      </div>
+
+      <div class="hero-content" id="heroContent">
+        <div class="hero-badge">20x Hackathon</div>
+        <h1>The <span>"Not a Roadmap Priority"</span> Wish List</h1>
+        <p class="subtitle">
+          Raise your hand &mdash; or just nod internally &mdash; if your team
+          has one.
+        </p>
+        <div class="hero-scroll">
+          <span>Scroll to explore</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 5v14m-7-7l7 7 7-7" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     2. THE PROBLEM
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide problem" id="s-problem">
+      <div class="slide-inner">
+        <div class="problem-layout">
+          <div class="problem-text">
+            <h2 class="reveal">Collecting Dust<br />in the Backlog</h2>
+            <ul class="reveal delay-1">
+              <li>Lingering bugs</li>
+              <li>Customer delight requests</li>
+              <li>Extra polish on existing features</li>
+              <li>UX/UI issues that are never addressed</li>
+            </ul>
+            <p class="reveal delay-2" style="margin-top: 1rem">
+              We lose time to manual requirement-gathering, and ticket-creating.
+              The things that would truly delight our customers end up
+              de-prioritized, indefinitely.
+            </p>
+          </div>
+          <div class="problem-visual reveal-right delay-1">
+            <div class="dust-particles">
+              <div class="dust"></div>
+              <div class="dust"></div>
+              <div class="dust"></div>
+              <div class="dust"></div>
+              <div class="dust"></div>
+            </div>
+            <img
+              src="./presentation-assets/suitcase.svg"
+              alt="Backlog illustration"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     3. THE 20X SOLUTION (stats)
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide stats-section" id="s-stats">
+      <div class="stats-bg-illo">
+        <img src="./presentation-assets/patient-experience.svg" alt="" />
+      </div>
+      <div class="slide-inner">
+        <div class="stats-header">
+          <h2 class="reveal">The 20x Hackathon Solution</h2>
+          <p class="reveal delay-1">
+            A new way of working that delivered real results.
+          </p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card reveal delay-1">
+            <span class="stat-icon"
+              ><img src="./presentation-assets/icon-settings.svg" alt=""
+            /></span>
+            <div class="stat-number" data-target="3">0</div>
+            <div class="stat-label">Functional Tools</div>
+          </div>
+          <div class="stat-card reveal delay-2">
+            <span class="stat-icon"
+              ><img src="./presentation-assets/icon-groups.svg" alt=""
+            /></span>
+            <div class="stat-number" data-target="3">0</div>
+            <div class="stat-label">People</div>
+          </div>
+          <div class="stat-card reveal delay-3">
+            <span class="stat-icon"
+              ><img src="./presentation-assets/icon-timer.svg" alt=""
+            /></span>
+            <div class="stat-number" data-target="48">0</div>
+            <div class="stat-label">Hours</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     4. AI-FORWARD PLANNING
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide ai-section" id="s-ai">
+      <div class="slide-inner">
+        <div class="ai-layout">
+          <div class="ai-text">
+            <h2 class="reveal">Beyond "Using&nbsp;AI to&nbsp;Code"</h2>
+            <p class="reveal delay-1">
+              We used AI as a <strong>collaborative partner</strong> to
+              kick-start design and architecture decisions, laying out
+              blueprints for our projects from day one.
+            </p>
+            <div class="ai-highlight reveal delay-2">
+              "Today, we lose time to manual requirement-gathering and
+              ticket-creating &mdash; so we used AI to eliminate that overhead
+              entirely."
+            </div>
+          </div>
+          <div class="ai-visual reveal-right delay-1">
+            <div class="glow-orb glow-orb-1"></div>
+            <div class="glow-orb glow-orb-2"></div>
+            <div class="ai-visual-card">
+              <img
+                src="./presentation-assets/provider.svg"
+                alt="AI Planning illustration"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     5. REPEATABLE PROCESS
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide process-section" id="s-process">
+      <div class="slide-inner">
+        <div class="process-layout">
+          <div class="process-visual reveal-left">
+            <img
+              src="./presentation-assets/group-3people.svg"
+              alt="Team collaboration"
+            />
+          </div>
+          <div class="process-text">
+            <h2 class="reveal">A Repeatable Process</h2>
+            <p class="reveal delay-1">
+              This isn't a one-time trick. It's a framework any team, any role
+              can adopt to finally tackle the work that usually gets
+              de-prioritized.
+            </p>
+            <div class="process-steps">
+              <div class="process-step reveal delay-1">
+                <span class="step-num">1</span>
+                <span class="step-text"
+                  >AI-assisted ideation &amp; requirement gathering</span
+                >
+              </div>
+              <div class="process-step reveal delay-2">
+                <span class="step-num">2</span>
+                <span class="step-text"
+                  >Collaborative architecture &amp; design blueprints</span
+                >
+              </div>
+              <div class="process-step reveal delay-3">
+                <span class="step-num">3</span>
+                <span class="step-text"
+                  >Rapid prototyping &amp; functional delivery</span
+                >
+              </div>
+              <div class="process-step reveal delay-4">
+                <span class="step-num">4</span>
+                <span class="step-text">Ship tools that create real value</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     6. PROJECTS — 48 HOURS
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide projects-section" id="s-projects">
+      <div class="slide-inner">
+        <div class="projects-header">
+          <h2 class="reveal">What We Built in 48 Hours</h2>
+          <p class="reveal delay-1">
+            Three functional internal tools, built by just three people.
+          </p>
+        </div>
+        <div class="projects-grid">
+          <div class="project-card reveal delay-1">
+            <div class="project-icon-wrap">
+              <img src="./presentation-assets/icon-adsclick.svg" alt="" />
+            </div>
+            <h3 class="project-title">UI/UX Issue Logger</h3>
+            <p class="project-desc">
+              Bridges the gap between design and development. Log platform
+              issues in real-time with zero friction.
+            </p>
+          </div>
+          <div class="project-card reveal delay-2">
+            <div class="project-icon-wrap">
+              <img src="./presentation-assets/icon-rocket.svg" alt="" />
+            </div>
+            <h3 class="project-title">DevX System on Steroids</h3>
+            <p class="project-desc">
+              Engineering teams focus on impact, not the process that keeps the
+              system running.
+            </p>
+          </div>
+          <div class="project-card reveal delay-3">
+            <div class="project-icon-wrap">
+              <img src="./presentation-assets/icon-videogame.svg" alt="" />
+            </div>
+            <h3 class="project-title">Arcade Games Hub</h3>
+            <p class="project-desc">
+              A hub anyone can contribute to &mdash; because team culture and
+              engagement are the engines of innovation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     7. VISION
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide vision-section" id="s-vision">
+      <div class="vision-bg-svg">
+        <svg
+          width="1920"
+          height="1080"
+          viewBox="0 0 1920 1080"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <g clip-path="url(#clip0_1_659)">
+            <rect width="1920" height="1080" fill="transparent" />
+            <g clip-path="url(#clip1_1_659)" class="vision-svg-top">
+              <path
+                d="M39.9274 939.07C31.7771 939.07 25.1624 932.455 25.1624 924.304V660.269H-3.0534C-11.2037 660.269 -17.8184 666.884 -17.8184 675.035V961.234C-17.8184 969.385 -11.2037 976 -3.0534 976H454.808C462.958 976 469.573 969.385 469.573 961.234V939.055H39.9274V939.07Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M512.555 791.451V924.303C512.555 932.454 505.941 939.07 497.791 939.07H39.929C31.7788 939.07 25.1641 932.454 25.1641 924.303V638.104C25.1641 629.953 31.7788 623.338 39.929 623.338H106.873C109.28 623.338 111.657 623.825 113.872 624.785L168.547 648.47C170.761 649.43 173.139 649.917 175.545 649.917H388.943"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M-43.5234 685.046H366.795"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M50.1307 657.64C53.7431 657.64 56.6716 654.711 56.6716 651.099C56.6716 647.486 53.7431 644.557 50.1307 644.557C46.5183 644.557 43.5898 647.486 43.5898 651.099C43.5898 654.711 46.5183 657.64 50.1307 657.64Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M73.3553 657.64C76.9678 657.64 79.8962 654.711 79.8962 651.099C79.8962 647.486 76.9678 644.557 73.3553 644.557C69.7429 644.557 66.8145 647.486 66.8145 651.099C66.8145 654.711 69.7429 657.64 73.3553 657.64Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M96.5819 657.64C100.194 657.64 103.123 654.711 103.123 651.099C103.123 647.486 100.194 644.557 96.5819 644.557C92.9695 644.557 90.041 647.486 90.041 651.099C90.041 654.711 92.9695 657.64 96.5819 657.64Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M388.941 748.629V618.893C388.941 614.242 392.706 610.477 397.357 610.477H658.107C662.758 610.477 666.523 614.242 666.523 618.893V781.883C666.523 786.534 662.758 790.3 658.107 790.3H431.76"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M485.756 640.88H622.228"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M496.535 660.135H527.734"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M486.199 679.332H622.672"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M486.199 736.92H622.672"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M437.327 662.291C441.396 662.291 444.694 658.992 444.694 654.923C444.694 650.854 441.396 647.555 437.327 647.555C433.258 647.555 429.959 650.854 429.959 654.923C429.959 658.992 433.258 662.291 437.327 662.291Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M437.328 661.597C430.403 661.597 424.777 667.223 424.777 674.148C424.777 674.783 424.822 675.418 424.925 676.039C428.454 678.46 432.721 679.893 437.328 679.893C441.934 679.893 446.201 678.475 449.73 676.039C449.819 675.418 449.878 674.798 449.878 674.148C449.878 667.223 444.252 661.597 437.328 661.597Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M437.327 681.443C448.743 681.443 457.998 672.188 457.998 660.77C457.998 649.353 448.743 640.098 437.327 640.098C425.911 640.098 416.656 649.353 416.656 660.77C416.656 672.188 425.911 681.443 437.327 681.443Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M389.68 835.012C412.92 835.012 431.76 816.17 431.76 792.928C431.76 769.686 412.92 750.844 389.68 750.844C366.44 750.844 347.6 769.686 347.6 792.928C347.6 816.17 366.44 835.012 389.68 835.012Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M388.941 769.214V816.052"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M412.523 792.928H365.703"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+            </g>
+            <g clip-path="url(#clip2_1_659)" class="vision-svg-top">
+              <path
+                d="M1165.71 694.255V729.072"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M952.703 765.148H914.629C910.299 765.148 906.785 761.641 906.785 757.32V605.61C906.785 601.289 910.299 597.783 914.629 597.783H1157.87C1162.2 597.783 1165.71 601.289 1165.71 605.61V632.881"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1118.43 765.148H1046.91"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M915.883 625.703H1200.42"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M919.358 615.872C921.277 615.872 922.832 614.319 922.832 612.404C922.832 610.489 921.277 608.937 919.358 608.937C917.439 608.937 915.883 610.489 915.883 612.404C915.883 614.319 917.439 615.872 919.358 615.872Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M931.696 615.872C933.615 615.872 935.17 614.319 935.17 612.404C935.17 610.489 933.615 608.937 931.696 608.937C929.776 608.937 928.221 610.489 928.221 612.404C928.221 614.319 929.776 615.872 931.696 615.872Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M944.035 615.872C945.954 615.872 947.51 614.319 947.51 612.404C947.51 610.489 945.954 608.937 944.035 608.937C942.116 608.937 940.561 610.489 940.561 612.404C940.561 614.319 942.116 615.872 944.035 615.872Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M986.391 666.75C988.31 666.75 989.866 665.198 989.866 663.282C989.866 661.367 988.31 659.815 986.391 659.815C984.472 659.815 982.916 661.367 982.916 663.282C982.916 665.198 984.472 666.75 986.391 666.75Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1100.91 666.75C1102.83 666.75 1104.39 665.198 1104.39 663.282C1104.39 661.367 1102.83 659.815 1100.91 659.815C1098.99 659.815 1097.44 661.367 1097.44 663.282C1097.44 665.198 1098.99 666.75 1100.91 666.75Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1144.05 705.887C1145.97 705.887 1147.53 704.334 1147.53 702.419C1147.53 700.504 1145.97 698.952 1144.05 698.952C1142.13 698.952 1140.58 700.504 1140.58 702.419C1140.58 704.334 1142.13 705.887 1144.05 705.887Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M981.686 723.89C983.605 723.89 985.161 722.337 985.161 720.422C985.161 718.507 983.605 716.955 981.686 716.955C979.767 716.955 978.211 718.507 978.211 720.422C978.211 722.337 979.767 723.89 981.686 723.89Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1001.3 801.381C1003.21 801.381 1004.77 799.828 1004.77 797.913C1004.77 795.998 1003.21 794.446 1001.3 794.446C999.376 794.446 997.82 795.998 997.82 797.913C997.82 799.828 999.376 801.381 1001.3 801.381Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M946.742 690.788C962.324 690.788 974.956 678.182 974.956 662.633C974.956 647.083 962.324 634.478 946.742 634.478C931.159 634.478 918.527 647.083 918.527 662.633C918.527 678.182 931.159 690.788 946.742 690.788Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1197.56 684.839V642.571C1197.56 639.424 1195.01 636.873 1191.85 636.873H1117.57C1114.41 636.873 1111.85 639.424 1111.85 642.571V684.839C1111.85 687.986 1114.41 690.537 1117.57 690.537H1191.85C1195.01 690.537 1197.56 687.986 1197.56 684.839Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1043.04 781.116V738.848C1043.04 735.701 1040.48 733.149 1037.33 733.149H963.04C959.886 733.149 957.329 735.701 957.329 738.848V781.116C957.329 784.263 959.886 786.814 963.04 786.814H1037.33C1040.48 786.814 1043.04 784.263 1043.04 781.116Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M995.02 663.321H1091.5"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1140.13 709.503C1140.13 709.503 1130.72 729.071 1107.97 729.071C1079.73 729.071 1057.48 696.369 1031.89 696.369C1006.29 696.369 986.393 714.982 986.393 714.982"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1006.79 804.214C1006.79 804.214 1025.61 822.217 1067.18 822.217C1127.58 822.217 1143.49 790.508 1143.49 790.508"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1135.98 791.886L1143.49 790.508L1144.07 797.936"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1152.42 786.65C1167.87 786.65 1180.39 774.156 1180.39 758.745C1180.39 743.334 1167.87 730.84 1152.42 730.84C1136.98 730.84 1124.46 743.334 1124.46 758.745C1124.46 774.156 1136.98 786.65 1152.42 786.65Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1142.23 756.546L1151.79 766.087L1206.21 711.781"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <g clip-path="url(#clip3_1_659)" class="vision-svg-top">
+              <path
+                d="M757.818 337.143V351.921C757.818 359.359 751.764 365.388 744.296 365.388H637.84C630.372 365.388 624.318 359.359 624.318 351.921V300.383"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M624.318 193.165V179.079C624.318 171.642 630.372 165.613 637.84 165.613H744.296C751.764 165.613 757.818 171.642 757.818 179.079V289.967"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M624.318 248.305V270.361"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M750.571 337.143V351.443C750.571 355.162 747.544 358.176 743.81 358.176H638.319C634.585 358.176 631.559 355.162 631.559 351.443V300.383"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M631.559 193.165V179.557C631.559 175.838 634.585 172.824 638.319 172.824H743.816C747.55 172.824 750.577 175.838 750.577 179.557V289.967"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M631.559 248.305V270.361"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M610.126 207.275C610.822 206.705 611.271 205.847 611.271 204.885C611.271 203.163 609.868 201.767 608.139 201.767C606.411 201.767 605.008 203.163 605.008 204.885C605.008 205.859 605.47 206.723 606.171 207.293C603.046 208.91 603.163 214.241 603.163 214.241C604.005 214.682 605.796 215.478 608.195 215.466C610.526 215.454 612.273 214.682 613.116 214.241C613.116 214.241 613.276 208.867 610.133 207.275H610.126Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M608.286 215.975C613.043 215.975 616.899 212.134 616.899 207.397C616.899 202.66 613.043 198.82 608.286 198.82C603.53 198.82 599.674 202.66 599.674 207.397C599.674 212.134 603.53 215.975 608.286 215.975Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+              />
+              <path
+                d="M625.641 207.452H681.289"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M625.641 216.03H653.287"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M625.641 228.896H681.289"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M666.206 270.361H603.458C598.362 270.361 594.23 274.476 594.23 279.551V291.192C594.23 296.268 598.362 300.382 603.458 300.382H666.206C671.302 300.382 675.434 296.268 675.434 291.192V279.551C675.434 274.476 671.302 270.361 666.206 270.361Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M687.122 193.165H602.843C597.747 193.165 593.615 197.279 593.615 202.355V239.115C593.615 244.191 597.747 248.305 602.843 248.305H687.122C692.218 248.305 696.35 244.191 696.35 239.115V202.355C696.35 197.279 692.218 193.165 687.122 193.165Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M810.157 290.58H725.878C720.782 290.58 716.65 294.694 716.65 299.77V327.34C716.65 332.416 720.782 336.53 725.878 336.53H810.157C815.253 336.53 819.385 332.416 819.385 327.34V299.77C819.385 294.694 815.253 290.58 810.157 290.58Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M607.031 281.157H662.674"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M607.137 289.992H646.52"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M747.219 300.916H805.236"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M747.119 310.326H776.322"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M747.219 324.81H792.932"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M734.644 305.174C735.339 304.604 735.788 303.746 735.788 302.785C735.788 301.063 734.386 299.666 732.657 299.666C730.928 299.666 729.526 301.063 729.526 302.785C729.526 303.759 729.987 304.623 730.688 305.192C727.563 306.81 727.68 312.14 727.68 312.14C728.523 312.581 730.313 313.378 732.712 313.365C735.044 313.353 736.791 312.581 737.634 312.14C737.634 312.14 737.794 306.767 734.65 305.174H734.644Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M732.646 313.861C737.402 313.861 741.258 310.021 741.258 305.284C741.258 300.547 737.402 296.707 732.646 296.707C727.889 296.707 724.033 300.547 724.033 305.284C724.033 310.021 727.889 313.861 732.646 313.861Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+              />
+            </g>
+            <g clip-path="url(#clip4_1_659)" class="vision-svg-top">
+              <path
+                d="M1179.24 226.966V-25.4162C1179.24 -44.2144 1194.48 -59.4512 1213.28 -59.4512H1481.35C1500.16 -59.4512 1515.4 -44.2144 1515.4 -25.4162V-6.85032"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1515.4 127.864V411.416C1515.4 430.215 1500.16 445.451 1481.35 445.451H1213.28C1194.48 445.451 1179.24 430.215 1179.24 411.416V361.68"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1197.47 226.965V-24.2091C1197.47 -33.6082 1205.09 -41.2266 1214.49 -41.2266H1480.14C1489.55 -41.2266 1497.17 -33.6082 1497.17 -24.2091V-6.85097"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1497.15 127.864V410.209C1497.15 419.608 1489.53 427.226 1480.13 427.226H1214.49C1205.09 427.226 1197.47 419.608 1197.47 410.209V361.68"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1628.6 127.864H1439.03C1428.23 127.864 1419.48 119.116 1419.48 108.323V13.2636C1419.48 2.47091 1428.23 -6.27783 1439.03 -6.27783H1653.99C1664.79 -6.27783 1673.54 2.47091 1673.54 13.2636V81.4109"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1102.82 316.775V246.801C1102.82 236.008 1111.57 227.259 1122.37 227.259H1337.32C1348.12 227.259 1356.87 236.008 1356.87 246.801V341.86C1356.87 352.653 1348.12 361.402 1337.32 361.402H1148.4"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1460.59 31.969C1463.58 30.9006 1465.74 28.0515 1465.74 24.6913C1465.74 20.4021 1462.27 16.9336 1457.98 16.9336C1453.68 16.9336 1450.21 20.4021 1450.21 24.6913C1450.21 28.0515 1452.37 30.8851 1455.36 31.969C1449.32 33.1768 1444.76 38.519 1444.76 44.9141C1444.76 45.5954 1444.81 46.2457 1444.92 46.8961C1448.63 49.451 1453.13 50.953 1457.98 50.953C1462.82 50.953 1467.32 49.451 1471.03 46.8961C1471.13 46.2457 1471.19 45.5954 1471.19 44.9141C1471.19 38.519 1466.63 33.1768 1460.59 31.969V31.969Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1451.19 40.3462C1451.07 40.3462 1450.94 40.2843 1450.86 40.1604C1448.32 35.6854 1452.13 32.2168 1452.18 32.1859C1452.34 32.0465 1452.57 32.062 1452.71 32.2168C1452.85 32.3717 1452.83 32.6039 1452.68 32.7433C1452.54 32.8672 1449.28 35.8402 1451.52 39.7887C1451.62 39.9746 1451.55 40.1913 1451.38 40.2997C1451.31 40.3307 1451.25 40.3462 1451.19 40.3462V40.3462Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1464.68 40.3462C1464.68 40.3462 1464.56 40.3462 1464.5 40.2997C1464.31 40.1913 1464.25 39.9746 1464.36 39.7887C1466.59 35.8402 1463.33 32.8672 1463.19 32.7433C1463.04 32.6039 1463.02 32.3717 1463.16 32.2168C1463.3 32.062 1463.54 32.0465 1463.69 32.1859C1463.74 32.2168 1467.53 35.6854 1465.01 40.1604C1464.95 40.2843 1464.81 40.3462 1464.68 40.3462V40.3462Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1450.73 43.1489C1450.6 43.1489 1450.49 43.0869 1450.42 42.994C1449.67 41.8946 1449.95 40.4081 1451.05 39.6494C1451.58 39.2932 1452.21 39.1539 1452.85 39.2777C1453.48 39.4016 1454.03 39.7578 1454.38 40.2842C1454.49 40.4546 1454.46 40.6868 1454.29 40.7952C1454.12 40.9036 1453.89 40.8726 1453.78 40.7023C1453.53 40.3307 1453.14 40.0829 1452.71 40.0055C1452.27 39.9281 1451.83 40.0055 1451.47 40.2688C1450.71 40.7797 1450.52 41.8172 1451.04 42.5759C1451.14 42.7463 1451.11 42.9785 1450.94 43.0869C1450.88 43.1334 1450.8 43.1489 1450.74 43.1489H1450.73Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1463.96 42.8235C1464.79 42.8235 1465.47 42.1441 1465.47 41.3061C1465.47 40.468 1464.79 39.7886 1463.96 39.7886C1463.12 39.7886 1462.44 40.468 1462.44 41.3061C1462.44 42.1441 1463.12 42.8235 1463.96 42.8235Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1141.49 262.719C1144.49 261.635 1146.64 258.801 1146.64 255.426C1146.64 251.136 1143.16 247.652 1138.87 247.652C1134.58 247.652 1131.09 251.136 1131.09 255.426C1131.09 258.801 1133.24 261.635 1136.25 262.719C1130.19 263.927 1125.62 269.284 1125.62 275.695C1125.62 276.376 1125.67 277.026 1125.78 277.677C1129.5 280.232 1134 281.734 1138.87 281.734C1143.73 281.734 1148.24 280.232 1151.96 277.677C1152.05 277.026 1152.11 276.361 1152.11 275.695C1152.11 269.284 1147.54 263.942 1141.49 262.719Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1457.98 52.3463C1469.95 52.3463 1479.66 42.6406 1479.66 30.668C1479.66 18.6955 1469.95 8.98975 1457.98 8.98975C1446 8.98975 1436.29 18.6955 1436.29 30.668C1436.29 42.6406 1446 52.3463 1457.98 52.3463Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1504.7 29.4761H1644.81"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1504.7 49.606H1574.39"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1504.7 69.7358H1540.31"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1504.7 102.253H1605.37"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1673.53 172.77C1698.34 172.77 1718.45 152.665 1718.45 127.865C1718.45 103.064 1698.34 82.9595 1673.53 82.9595C1648.72 82.9595 1628.61 103.064 1628.61 127.865C1628.61 152.665 1648.72 172.77 1673.53 172.77Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1666.74 124.473C1666.74 123.374 1666.99 122.305 1667.47 121.314C1668.88 118.388 1671.89 112.024 1671.89 110.46C1671.89 108.4 1670.86 105.319 1671.89 103.817C1672.54 102.857 1673.95 101.216 1677.03 102.238C1680.11 103.259 1681.15 106.356 1681.15 109.438C1681.15 112.519 1679.09 117.66 1680.13 117.66H1693.5C1694.52 117.66 1696.76 119.487 1696.76 121.144C1696.76 122.801 1695.54 123.838 1695.54 124.86C1695.54 125.882 1696.56 126.13 1696.56 127.942C1696.56 131.023 1694.5 131.023 1694.5 132.061C1694.5 133.098 1695.53 133.083 1694.5 135.142C1693.48 137.202 1692.44 136.164 1692.44 137.202C1692.44 138.239 1693.47 139.261 1692.44 141.32C1691.42 143.38 1690.38 143.38 1689.36 143.38H1670.93C1667.77 143.38 1666.73 143.008 1666.73 141.646V124.489L1666.74 124.473Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1663.32 121.206C1663.32 120.85 1663.06 120.556 1662.7 120.556C1660.9 120.525 1656.04 120.308 1654.4 120.556C1653.37 120.726 1652.35 120.726 1651.33 121.748C1650.31 122.77 1650.31 123.436 1650.31 124.644V139.137C1650.31 140.252 1650.31 141.274 1651.33 142.312C1652.35 143.349 1654.41 143.334 1655.45 143.334H1661.43C1662.65 143.334 1663.1 143.488 1663.4 142.373C1663.64 141.398 1663.23 124.675 1663.33 121.175L1663.32 121.206Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1138.87 283.066C1150.85 283.066 1160.56 273.36 1160.56 261.387C1160.56 249.415 1150.85 239.709 1138.87 239.709C1126.89 239.709 1117.18 249.415 1117.18 261.387C1117.18 273.36 1126.89 283.066 1138.87 283.066Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1182.57 261.527H1322.69"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1182.57 283.205H1252.18"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1182.57 315.722H1322.69"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1558.9 149.543C1558.9 222.227 1510.88 304.388 1385.4 293.549"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1548.19 157.657L1558.65 146.817L1568.15 158.09"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1394.68 304.728L1384.91 293.254L1397.07 284.908"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1103.47 406.585C1128.28 406.585 1148.39 386.481 1148.39 361.68C1148.39 336.88 1128.28 316.775 1103.47 316.775C1078.66 316.775 1058.55 336.88 1058.55 361.68C1058.55 386.481 1078.66 406.585 1103.47 406.585Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1103.05 379.131C1102.9 379.131 1102.73 379.131 1102.57 379.131C1092.66 378.868 1088.49 371.529 1088.32 371.203C1087.9 370.46 1088.18 369.516 1088.93 369.098C1089.67 368.679 1090.61 368.958 1091.03 369.701C1091.19 369.98 1094.58 375.818 1102.65 376.019C1102.77 376.019 1102.91 376.019 1103.04 376.019C1110.92 376.019 1115.17 369.856 1115.34 369.578C1115.82 368.865 1116.78 368.679 1117.49 369.144C1118.2 369.624 1118.39 370.569 1117.92 371.281C1117.71 371.606 1112.63 379.1 1103.05 379.1V379.131Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1093.43 357.918C1095.51 357.918 1097.2 355.672 1097.2 352.901C1097.2 350.13 1095.51 347.884 1093.43 347.884C1091.36 347.884 1089.67 350.13 1089.67 352.901C1089.67 355.672 1091.36 357.918 1093.43 357.918Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1112.25 357.918C1114.33 357.918 1116.02 355.672 1116.02 352.901C1116.02 350.13 1114.33 347.884 1112.25 347.884C1110.18 347.884 1108.49 350.13 1108.49 352.901C1108.49 355.672 1110.18 357.918 1112.25 357.918Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1103.47 388.004C1118.02 388.004 1129.81 376.219 1129.81 361.681C1129.81 347.142 1118.02 335.357 1103.47 335.357C1088.93 335.357 1077.14 347.142 1077.14 361.681C1077.14 376.219 1088.93 388.004 1103.47 388.004Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+            </g>
+            <g clip-path="url(#clip5_1_659)" class="vision-svg-bottom">
+              <path
+                d="M1103.3 1010.73V947.577C1103.3 940.262 1109.23 934.325 1116.54 934.325H1527.01C1534.32 934.325 1540.25 940.262 1540.25 947.577V1038.56"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1118.5 981.501H1598.68"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1124.37 964.857C1127.61 964.857 1130.24 962.229 1130.24 958.987C1130.24 955.745 1127.61 953.116 1124.37 953.116C1121.14 953.116 1118.51 955.745 1118.51 958.987C1118.51 962.229 1121.14 964.857 1124.37 964.857Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1145.19 964.857C1148.43 964.857 1151.06 962.229 1151.06 958.987C1151.06 955.745 1148.43 953.116 1145.19 953.116C1141.96 953.116 1139.33 955.745 1139.33 958.987C1139.33 962.229 1141.96 964.857 1145.19 964.857Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1166.02 964.857C1169.25 964.857 1171.88 962.229 1171.88 958.987C1171.88 955.745 1169.25 953.116 1166.02 953.116C1162.78 953.116 1160.15 955.745 1160.15 958.987C1160.15 962.229 1162.78 964.857 1166.02 964.857Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1225.58 1010.73H1052.18C1041.21 1010.73 1032.32 1019.63 1032.32 1030.61V1066.39C1032.32 1077.37 1041.21 1086.27 1052.18 1086.27H1225.58C1236.55 1086.27 1245.44 1077.37 1245.44 1066.39V1030.61C1245.44 1019.63 1236.55 1010.73 1225.58 1010.73Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1056.28 1035.83H1204.4"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1056.28 1059.69H1139.54"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1575.75 1153.24H1379.12C1374.14 1153.24 1370.1 1149.2 1370.1 1144.22V1047.6C1370.1 1045.11 1371.11 1042.84 1372.75 1041.21C1374.39 1039.58 1376.64 1038.56 1379.13 1038.56H1575.76C1580.74 1038.56 1584.78 1042.61 1584.78 1047.59V1144.21C1584.78 1149.19 1580.74 1153.23 1575.76 1153.23L1575.75 1153.24Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M1372.75 1041.21L1477.44 1095.9L1582.13 1041.21"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <g clip-path="url(#clip6_1_659)" class="vision-svg-bottom">
+              <path
+                d="M371.721 235.455V266.927C371.721 271.48 368.021 275.175 363.462 275.175H107.366C102.807 275.175 99.1074 271.48 99.1074 266.927V241.228"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M99.1074 146.38V107.072C99.1074 102.52 102.807 98.8247 107.366 98.8247H363.462C368.021 98.8247 371.721 102.52 371.721 107.072V163.7"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M99.1074 193.392V205.764"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M108.588 128.186H408.173"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M112.256 117.827C114.277 117.827 115.915 116.192 115.915 114.174C115.915 112.156 114.277 110.52 112.256 110.52C110.236 110.52 108.598 112.156 108.598 114.174C108.598 116.192 110.236 117.827 112.256 117.827Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M125.246 117.827C127.267 117.827 128.905 116.192 128.905 114.174C128.905 112.156 127.267 110.52 125.246 110.52C123.226 110.52 121.588 112.156 121.588 114.174C121.588 116.192 123.226 117.827 125.246 117.827Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M138.237 117.827C140.257 117.827 141.895 116.192 141.895 114.174C141.895 112.156 140.257 110.52 138.237 110.52C136.216 110.52 134.578 112.156 134.578 114.174C134.578 116.192 136.216 117.827 138.237 117.827Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M175.4 146.38H67.2139C60.3724 146.38 54.8262 151.919 54.8262 158.752V181.02C54.8262 187.853 60.3724 193.392 67.2139 193.392H175.4C182.242 193.392 187.788 187.853 187.788 181.02V158.752C187.788 151.919 182.242 146.38 175.4 146.38Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M69.7734 162.001H162.186"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M69.7734 176.847H121.719"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M67.4112 206.928H155.579C161.869 206.928 166.967 212.021 166.967 218.3V228.857C166.967 235.136 161.869 240.228 155.579 240.228H67.4112C61.1207 240.228 56.0234 235.136 56.0234 228.857V218.3C56.0234 212.021 61.1207 206.928 67.4112 206.928Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+              />
+              <path
+                d="M75.2988 229.434H101.074"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M74.8848 217.062H126.831"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M393.871 235.076H271.19C268.085 235.076 265.566 232.56 265.566 229.459V169.326C265.566 167.775 266.194 166.365 267.218 165.35C268.242 164.336 269.646 163.701 271.199 163.701H393.879C396.984 163.701 399.503 166.216 399.503 169.317V229.451C399.503 232.552 396.984 235.067 393.879 235.067L393.871 235.076Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+              />
+              <path
+                d="M267.219 165.35L332.535 199.388L397.852 165.35"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M344.74 193.029L397.851 233.434"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M267.252 232.832L319.982 193.425"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M247.893 196.328L253.757 201.821L247.811 206.951"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M200.242 206.951L194.379 201.466L200.325 196.328"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M194.395 201.64H252.204"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <g clip-path="url(#clip7_1_659)" class="vision-svg-bottom">
+              <path
+                d="M1761.7 713.458H1604.44C1601.21 713.458 1598.59 710.821 1598.59 707.571V593.476C1598.59 590.226 1601.21 587.589 1604.44 587.589H1786.03C1789.26 587.589 1791.88 590.226 1791.88 593.476V678.02"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1605.99 608.521H1818.41"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1608.59 601.128C1610.02 601.128 1611.18 599.961 1611.18 598.52C1611.18 597.08 1610.02 595.913 1608.59 595.913C1607.15 595.913 1605.99 597.08 1605.99 598.52C1605.99 599.961 1607.15 601.128 1608.59 601.128Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1617.8 601.128C1619.23 601.128 1620.39 599.961 1620.39 598.52C1620.39 597.08 1619.23 595.913 1617.8 595.913C1616.36 595.913 1615.2 597.08 1615.2 598.52C1615.2 599.961 1616.36 601.128 1617.8 601.128Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1627.01 601.128C1628.44 601.128 1629.6 599.961 1629.6 598.52C1629.6 597.08 1628.44 595.913 1627.01 595.913C1625.58 595.913 1624.42 597.08 1624.42 598.52C1624.42 599.961 1625.58 601.128 1627.01 601.128Z"
+                fill="#D8D5CF"
+              />
+              <path
+                d="M1611.21 643.147H1779.26"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1611.21 668.013H1779.26"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1737.52 692.736V619.259"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1695.12 692.736V619.259"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1652.78 692.736L1652.66 619.259"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1702.55 647.891H1729.49C1730.55 647.891 1731.42 648.756 1731.42 649.834V661.472C1731.42 662.551 1730.55 663.416 1729.49 663.416H1702.55C1701.49 663.416 1700.62 662.551 1700.62 661.472V649.834C1700.62 648.756 1701.49 647.891 1702.55 647.891Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+              />
+              <path
+                d="M1617.64 622.578H1644.58C1645.64 622.578 1646.51 623.443 1646.51 624.521V636.159C1646.51 637.238 1645.64 638.103 1644.58 638.103H1617.64C1616.58 638.103 1615.71 637.238 1615.71 636.159V624.521C1615.71 623.443 1616.58 622.578 1617.64 622.578Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+              />
+              <path
+                d="M1617.64 673.204H1644.58C1645.64 673.204 1646.51 674.069 1646.51 675.147V686.785C1646.51 687.863 1645.64 688.728 1644.58 688.728H1617.64C1616.58 688.728 1615.71 687.863 1615.71 686.785V675.147C1615.71 674.069 1616.58 673.204 1617.64 673.204Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+              />
+              <path
+                d="M1786.11 690.882C1790.85 690.882 1793.22 692.79 1794.64 695.645C1796.06 698.5 1795.11 706.123 1796.53 708.978C1797.96 711.833 1800.32 712.31 1800.8 714.694C1801.27 717.078 1799.37 716.601 1797.01 716.601C1794.64 716.601 1776.05 716.678 1774.44 716.642C1772.84 716.607 1771.42 715.653 1771.89 714.223C1772.36 712.793 1776.15 710.891 1776.63 707.553C1777.1 704.216 1776.4 698.37 1778.05 695.645C1779.39 693.431 1781.37 690.882 1786.1 690.882H1786.11Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+              />
+              <path
+                d="M1781.37 716.601C1781.37 716.601 1781.85 721.363 1786.39 721.281C1791.33 721.193 1791.33 716.601 1791.33 716.601"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+              />
+              <path
+                d="M1793.69 688.027C1793.69 688.027 1801.27 691.836 1799.85 702.314"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1773.31 701.838C1773.31 701.838 1770.94 692.313 1779 688.027"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M1786.58 730.411C1800.97 730.411 1812.64 718.683 1812.64 704.216C1812.64 689.748 1800.97 678.02 1786.58 678.02C1772.19 678.02 1760.53 689.748 1760.53 704.216C1760.53 718.683 1772.19 730.411 1786.58 730.411Z"
+                stroke="#D8D5CF"
+                stroke-width="2"
+                stroke-miterlimit="10"
+              />
+            </g>
+          </g>
+          <defs>
+            <clipPath id="clip0_1_659">
+              <rect width="1920" height="1080" fill="white" />
+            </clipPath>
+            <clipPath id="clip1_1_659">
+              <rect
+                width="713"
+                height="367"
+                fill="white"
+                transform="translate(-45 609)"
+              />
+            </clipPath>
+            <clipPath id="clip2_1_659">
+              <rect
+                width="301"
+                height="226"
+                fill="white"
+                transform="translate(906 597)"
+              />
+            </clipPath>
+            <clipPath id="clip3_1_659">
+              <rect
+                width="227"
+                height="201"
+                fill="white"
+                transform="translate(593 165)"
+              />
+            </clipPath>
+            <clipPath id="clip4_1_659">
+              <rect
+                width="663"
+                height="508"
+                fill="white"
+                transform="translate(1057 -61)"
+              />
+            </clipPath>
+            <clipPath id="clip5_1_659">
+              <rect
+                width="569"
+                height="286"
+                fill="white"
+                transform="translate(1031 933)"
+              />
+            </clipPath>
+            <clipPath id="clip6_1_659">
+              <rect
+                width="355"
+                height="178"
+                fill="white"
+                transform="translate(54 98)"
+              />
+            </clipPath>
+            <clipPath id="clip7_1_659">
+              <rect
+                width="221"
+                height="144"
+                fill="white"
+                transform="translate(1598 587)"
+              />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+      <div class="slide-inner">
+        <div class="vision-header">
+          <h2 class="reveal">Imagine the Possibilities</h2>
+          <p class="reveal delay-1">
+            What if we kept innovating beyond the Hackathon?
+          </p>
+        </div>
+        <div class="vision-grid">
+          <div class="vision-card reveal delay-1">
+            <h3>
+              <span class="vision-icon"
+                ><img src="./presentation-assets/icon-automode.svg" alt=""
+              /></span>
+              Innovation Sprints
+            </h3>
+            <p>
+              What if every team had Innovation Sprints earmarked for
+              high-value, innovative efforts that could very well drive or
+              enable actual roadmap items to come?
+            </p>
+          </div>
+          <div class="vision-card reveal delay-2">
+            <h3>
+              <span class="vision-icon"
+                ><img src="./presentation-assets/icon-psychology.svg" alt=""
+              /></span>
+              Tebra Labs
+            </h3>
+            <p>
+              A dedicated team focused on internal enablement tools and
+              processes to serve all of ProdDev in creating "nailed it"
+              experiences for our customers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     8. CLOSING
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide closing-section" id="s-closing">
+      <div class="slide-inner">
+        <div class="closing-layout">
+          <div class="closing-text">
+            <h2 class="reveal">Force-Multipliers for Big Ideas</h2>
+            <p class="reveal delay-1">
+              We envision our 20x process and outputs as force-multipliers for
+              achieving big ideas and business value that falls through the
+              cracks of our daily workload.
+            </p>
+            <p class="reveal delay-2">
+              <strong
+                >If a small team can achieve this much output in a short time,
+                we don't have to choose between the roadmap and innovation
+                &mdash; we just need a new way to work.</strong
+              >
+            </p>
+          </div>
+          <div class="closing-visual reveal-right delay-2">
+            <video
+              src="./presentation-assets/jazz.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════════════════════════════════════════════
+     9. CTA
+     ═════════════════════════════════════════════════════ -->
+    <section class="slide cta-section" id="s-cta">
+      <div class="cta-illo-container cta-illo-container-1">
+        <img
+          class="cta-illo"
+          src="./presentation-assets/group-3people.svg"
+          alt=""
+        />
+      </div>
+      <div class="cta-illo-container cta-illo-container-2">
+        <img class="cta-illo" src="./presentation-assets/provider.svg" alt="" />
+      </div>
+      <div class="slide-inner">
+        <div class="cta-content">
+          <h2 class="reveal">
+            Let's <span>Dive Into</span><br />the Projects!
+          </h2>
+          <p class="reveal delay-1">
+            The best way to predict the future is to build it.
+          </p>
+          <button
+            class="cta-btn reveal delay-2"
+            onclick="window.scrollTo({top:0,behavior:'smooth'})"
+          >
+            Back to Top
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (function () {
+        /* ── Hero video interaction ── */
+        const heroVideo = document.getElementById("heroVideo");
+        const heroPlayButton = document.getElementById("heroPlayButton");
+        const heroOverlay = document.getElementById("heroOverlay");
+        const heroContent = document.getElementById("heroContent");
+        const heroStageLogo = document.getElementById("heroStageLogo");
+        const heroPlayButtonContainer = document.getElementsByClassName(
+          "hero-play-button-container",
+        );
+
+        if (heroPlayButton && heroVideo) {
+          let introComplete = false;
+          let buttonReady = false;
+          let mouseX = window.innerWidth / 2;
+          let mouseY = window.innerHeight / 2;
+
+          // Disable scrolling and hide cursor initially
+          document.body.classList.add("no-scroll");
+          document.body.classList.add("hide-cursor");
+
+          // Initialize button as dot at center
+          heroPlayButton.classList.add("intro-dot");
+          heroPlayButton.style.left = mouseX + "px";
+          heroPlayButton.style.top = mouseY + "px";
+          heroPlayButton.style.transform = "translate(-50%, -50%)";
+
+          // Track mouse movement
+          document.addEventListener("mousemove", (e) => {
+            if (!introComplete) {
+              mouseX = e.clientX;
+              mouseY = e.clientY;
+
+              // Update dot position
+              heroPlayButton.style.left = mouseX + "px";
+              heroPlayButton.style.top = mouseY + "px";
+
+              // Subtle gradient shift based on mouse position
+              const xPercent = (mouseX / window.innerWidth) * 100;
+              const yPercent = (mouseY / window.innerHeight) * 100;
+              const angle = 135 + (xPercent - 50) * 0.3 + (yPercent - 50) * 0.3;
+              heroPlayButton.style.background = `linear-gradient(${angle}deg, var(--coral), #ff6b4a)`;
+            }
+          });
+
+          // Handle click to start intro animation
+          const handleDocumentClick = (e) => {
+            if (!introComplete) {
+              introComplete = true;
+
+              // Animate to center
+              heroPlayButton.classList.add("animating-to-center");
+              heroPlayButton.style.left = "50%";
+              heroPlayButton.style.top = "50%";
+
+              // After reaching center, expand to button size
+              setTimeout(() => {
+                heroPlayButton.classList.remove("intro-dot");
+                heroPlayButton.classList.add("show");
+                heroPlayButton.classList.add("expanding");
+
+                // Fade in text after expansion
+                setTimeout(() => {
+                  // heroPlayButton.style.opacity = "1";
+                  button20x.style.opacity = "1";
+                  buttonHackathon.style.opacity = "1";
+                  heroPlayButton.classList.add("text-visible");
+                  buttonReady = true;
+
+                  // Show cursor again
+                  document.body.classList.remove("hide-cursor");
+
+                  // Remove the document click listener
+                  document.removeEventListener("click", handleDocumentClick);
+                }, 600);
+              }, 800);
+            }
+          };
+
+          document.addEventListener("click", handleDocumentClick);
+
+          heroPlayButton.addEventListener("click", (e) => {
+            if (buttonReady) {
+              const button20x = document.getElementById("button20x");
+              const buttonHackathon =
+                document.getElementById("buttonHackathon");
+
+              // Step 1: Hide "Hackathon" text
+              if (buttonHackathon) {
+                buttonHackathon.style.opacity = "0";
+                buttonHackathon.style.transition = "opacity 1s ease";
+              }
+
+              // Step 2: After 300ms, shrink button to just "20x"
+              setTimeout(() => {
+                buttonHackathon.style.display = "none";
+                heroPlayButton.classList.add("shrink-to-20x");
+
+                // Step 3: After shrinking, expand and fade out
+                setTimeout(() => {
+                  heroPlayButton.classList.add("final-expand");
+
+                  // Step 4: Fade out "20x" text during expansion
+                  if (button20x) {
+                    button20x.style.opacity = "0";
+                    button20x.style.transition = "opacity 0.4s ease";
+                  }
+
+                  // Step 5: After animation completes, hide button and start video
+                  setTimeout(() => {
+                    heroPlayButton.style.display = "none";
+                    // heroPlayButtonContainer.style.display = "none";
+
+                    // Start playing the video
+                    heroVideo.classList.add("playing");
+                    heroOverlay.classList.add("video-playing");
+                    heroVideo.play();
+
+                    heroPlayButtonContainer.style.display = "none";
+
+                    // When video ends, fade in content and enable scrolling
+                    heroVideo.addEventListener(
+                      "ended",
+                      () => {
+                        heroContent.style.display = "block";
+                        heroContent.classList.add("visible");
+                        heroStageLogo.classList.add("visible");
+
+                        // Enable scrolling
+                        document.body.classList.remove("no-scroll");
+                      },
+                      { once: true },
+                    );
+                  }, 600);
+                }, 500);
+              }, 600);
+            }
+          });
+        }
+
+        /* ── Section IDs for nav dots ── */
+        const sectionIds = [
+          "s-hero",
+          "s-problem",
+          "s-stats",
+          "s-ai",
+          "s-process",
+          "s-projects",
+          "s-vision",
+          "s-closing",
+          "s-cta",
+        ];
+
+        /* ── Build nav dots ── */
+        const dotsContainer = document.getElementById("navDots");
+        sectionIds.forEach((id, i) => {
+          const dot = document.createElement("div");
+          dot.classList.add("nav-dot");
+          dot.dataset.index = i;
+          dot.addEventListener("click", () => {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+          });
+          dotsContainer.appendChild(dot);
+        });
+        const dots = dotsContainer.querySelectorAll(".nav-dot");
+
+        /* ── Scroll reveal ── */
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+        );
+
+        document
+          .querySelectorAll(
+            ".reveal, .reveal-left, .reveal-right, .reveal-scale",
+          )
+          .forEach((el) => {
+            revealObserver.observe(el);
+          });
+
+        /* ── Active section tracking ── */
+        const sectionObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const idx = sectionIds.indexOf(entry.target.id);
+                dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+              }
+            });
+          },
+          { threshold: 0.4 },
+        );
+
+        sectionIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) sectionObserver.observe(el);
+        });
+
+        /* ── Animate stat counters ── */
+        let countersAnimated = false;
+        const statsObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !countersAnimated) {
+                countersAnimated = true;
+                document.querySelectorAll(".stat-number").forEach((counter) => {
+                  const target = parseInt(counter.dataset.target);
+                  const duration = 2000;
+                  const start = performance.now();
+                  const animate = (now) => {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // easeOutExpo
+                    const eased =
+                      progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                    counter.textContent = Math.round(eased * target);
+                    if (progress < 1) requestAnimationFrame(animate);
+                  };
+                  requestAnimationFrame(animate);
+                });
+              }
+            });
+          },
+          { threshold: 0.3 },
+        );
+
+        const statsEl = document.getElementById("s-stats");
+        if (statsEl) statsObserver.observe(statsEl);
+
+        /* ── Progress bar ── */
+        window.addEventListener(
+          "scroll",
+          () => {
+            const h =
+              document.documentElement.scrollHeight - window.innerHeight;
+            const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+            document.getElementById("progressBar").style.width = pct + "%";
+          },
+          { passive: true },
+        );
+
+        /* ── Hero button visible immediately (content hidden until video ends) ── */
+        const hero = document.getElementById("s-hero");
+        // Don't auto-show hero content anymore - it will appear after video
+
+        /* ── Fade in stats background illustration ── */
+        const statsBgIllo = document.querySelector(".stats-bg-illo");
+        if (statsBgIllo) {
+          const statsBgObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) statsBgIllo.classList.add("show");
+              });
+            },
+            { threshold: 0.2 },
+          );
+          statsBgObserver.observe(document.getElementById("s-stats"));
+        }
+
+        /* ── Parallax stage logo ── */
+        const stageLogo = document.querySelector(".hero-stage-logo");
+        if (stageLogo) {
+          window.addEventListener(
+            "scroll",
+            () => {
+              const scrollY = window.scrollY;
+              const heroH = hero.offsetHeight;
+              if (scrollY <= heroH) {
+                const pct = scrollY / heroH; // 0 at top, 1 at bottom of hero
+                // As you scroll: logo recedes away, tilts flatter, shrinks, and fades
+                const rotateX = 55 + pct * 20; // 55deg -> 75deg (flatter on floor)
+                const translateY = pct * 80; // sinks down
+                const scale = 1 - pct * 0.3; // shrinks 1 -> 0.7
+                const opacity = 0.12 - pct * 0.12; // fades out to 0
+                stageLogo.style.transform = `translateX(-50%) perspective(600px) rotateX(${rotateX}deg) translateY(${translateY}px) scale(${scale})`;
+                stageLogo.style.opacity = Math.max(0, opacity);
+              }
+            },
+            { passive: true },
+          );
+        }
+
+        /* ── Vision section SVG parallax animation ── */
+        const visionSection = document.getElementById("s-vision");
+        const visionSvgTop = document.querySelectorAll(".vision-svg-top");
+        const visionSvgBottom = document.querySelectorAll(".vision-svg-bottom");
+
+        if (visionSection && visionSvgTop.length && visionSvgBottom.length) {
+          window.addEventListener(
+            "scroll",
+            () => {
+              const scrollY = window.scrollY;
+              const rect = visionSection.getBoundingClientRect();
+              const sectionTop = rect.top + scrollY;
+              const windowHeight = window.innerHeight;
+
+              // Calculate how far we've scrolled relative to the section
+              const scrollRelativeToSection =
+                scrollY - sectionTop + windowHeight;
+
+              // Move top half to the right as we scroll
+              const topTranslateX = scrollRelativeToSection * 0.15; // Moves right
+              visionSvgTop.forEach((el) => {
+                el.style.transform = `translateX(${topTranslateX}px)`;
+              });
+
+              // Move bottom half to the left as we scroll (opposite direction)
+              const bottomTranslateX = scrollRelativeToSection * -0.15; // Moves left
+              visionSvgBottom.forEach((el) => {
+                el.style.transform = `translateX(${bottomTranslateX}px)`;
+              });
+            },
+            { passive: true },
+          );
+        }
+      })();
+    </script>
+  </body>
+</html>
